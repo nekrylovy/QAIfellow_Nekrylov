@@ -11,9 +11,13 @@ public class JiraAuthorizationPage {
     private final SelenideElement passwordInput = $x("//input[@id='login-form-password']");
     private final SelenideElement logInButton = $x("//input[@id='login']");
 
-    public JiraDashboardPage authorize(String userName, String password) {
+    public void fillUserNameInput(String userName) {
         userNameInput.shouldBe(Condition.visible).sendKeys(userName);
-        passwordInput.sendKeys(password);
+    }
+    public void fillPasswordInput(String userName) {
+        passwordInput.shouldBe(Condition.visible).sendKeys(userName);
+    }
+    public JiraDashboardPage authorize() {
         logInButton.click();
         return Selenide.page(JiraDashboardPage.class);
     }

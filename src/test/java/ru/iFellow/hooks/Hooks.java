@@ -1,20 +1,26 @@
-package ru.iFellow;
+package ru.iFellow.hooks;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.BeforeEach;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import org.openqa.selenium.PageLoadStrategy;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 
-public class WebHooks {
+public class Hooks {
 
-    @BeforeEach
+    @Before("@jira")
     public void initBrowser() {
         Configuration.pageLoadStrategy = PageLoadStrategy.EAGER.toString();
         Configuration.timeout = 10_000;
         Selenide.open("https://edujira.ifellow.ru/");
         getWebDriver().manage().window().maximize();
+    }
+
+    @After("@jira")
+    public void killBrowser() {
+        Selenide.closeWebDriver();
     }
 }
