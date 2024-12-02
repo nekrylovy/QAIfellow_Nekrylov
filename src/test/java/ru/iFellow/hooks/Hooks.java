@@ -14,7 +14,6 @@ public class Hooks {
     @Before("@jira")
     public void initBrowser() {
         Configuration.pageLoadStrategy = PageLoadStrategy.EAGER.toString();
-        Configuration.timeout = 10_000;
         Selenide.open("https://edujira.ifellow.ru/");
         getWebDriver().manage().window().maximize();
     }
