@@ -3,33 +3,32 @@ package ru.iFellow.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 
 import static com.codeborne.selenide.Selenide.$x;
 
 public class JiraProjectPage {
-    private final SelenideElement projectTitle = $x("//div[@class='aui-item project-title']/child::a");
-    private final SelenideElement issueCounter = $x("//div[@class='showing']/child::span");
-    private final SelenideElement createButton = $x("//a[text()='Создать']");
-    private final SelenideElement themeInput = $x("//input[@id='summary']");
-    private final SelenideElement createIssueButton = $x("//input[@id='create-issue-submit']");
-    private final SelenideElement successMsgExit = $x("//button[@class='aui-close-button']");
+    private final SelenideElement projectTitle = $x("//div[@class='aui-item project-title']/child::a").as("Название проекта");
+    private final SelenideElement issueCounter = $x("//div[@class='showing']/child::span").as("Счетчик задач");
+    private final SelenideElement createButton = $x("//a[text()='Создать']").as("Поле поиска");
+    private final SelenideElement themeInput = $x("//input[@id='summary']").as("Тема задачи");
+    private final SelenideElement createIssueButton = $x("//input[@id='create-issue-submit']").as("Кнопка \"Создать\"");
+    private final SelenideElement successMsgExit = $x("//button[@class='aui-close-button']").as("Кнопка закрытия всплывающего уведомления");
+    private final SelenideElement searchInput = $x("//input[@id='quickSearchInput']").as("Поле поиска");
     private int beforeCounter;
-    private int afterCounter;
 
-    public String getProjectTitle() {
-        return projectTitle.getOwnText();
-    }
-
-    public JiraProjectPage checkProjectName() {
-        Assertions.assertEquals("Test", this.getProjectTitle());
+    @Step("Проверка имени проекта \"{projectName}\"")
+    public JiraProjectPage checkProjectName(String projectName) {
+        Assertions.assertEquals(projectName, this.getProjectTitle());
         return this;
     }
 
-    public JiraProjectPage createIssue() {
+    @Step("Создание задачи \"{taskName}\"")
+    public JiraProjectPage createIssue(String taskName) {
         beforeCounter = getIssueCounter();
         createButton.click();
-        themeInput.shouldBe(Condition.visible).sendKeys("Задача для теста счетчика");
+        themeInput.shouldBe(Condition.visible).sendKeys(taskName);
         createIssueButton.shouldBe(Condition.visible).click();
         successMsgExit.click();
         Selenide.refresh();
@@ -37,10 +36,22 @@ public class JiraProjectPage {
         return this;
     }
 
-    public JiraTaskPage checkCounter() {
-        afterCounter = getIssueCounter();
+    @Step("Проверка счетчика задач")
+    public JiraProjectPage checkCounter() {
+        int afterCounter = getIssueCounter();
         Assertions.assertEquals(beforeCounter, afterCounter);
+        return this;
+    }
+
+    @Step("Переключение на задачу \"{taskName}\"")
+    public JiraTaskPage goToTask(String taskName) {
+        searchInput.sendKeys(taskName);
+        searchInput.pressEnter();
         return Selenide.page(JiraTaskPage.class);
+    }
+
+    public String getProjectTitle() {
+        return projectTitle.getOwnText();
     }
 
     public int getIssueCounter() {
@@ -52,7 +63,7 @@ public class JiraProjectPage {
         }
         catch (NumberFormatException nfe)
         {
-            System.out.println("NumberFormatException: " + nfe.getMessage());
+            nfe.printStackTrace();
         }
         return result;
     }

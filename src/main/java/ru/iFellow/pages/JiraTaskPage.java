@@ -3,12 +3,12 @@ package ru.iFellow.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 
 import static com.codeborne.selenide.Selenide.$x;
 
 public class JiraTaskPage {
-    private final SelenideElement searchInput = $x("//input[@id='quickSearchInput']").as("Поле поиска");
     private final SelenideElement status = $x("//strong[text()='Статус:']/following-sibling::span[@id='status-val']/span").as("Статус задачи");
     private final SelenideElement version = $x("//strong[@title='Исправить в версиях']/following-sibling::span[@id='fixfor-val']//a").as("Исправить в версиях");
     private final SelenideElement createButton = $x("//a[text()='Создать']").as("Кнопка \"Создать\" в меню");
@@ -26,21 +26,18 @@ public class JiraTaskPage {
     private final SelenideElement successMsgExit = $x("//button[@class='aui-close-button']").as("Кнопка закрытия всплывающего уведомления");
     private final SelenideElement completeStatus = $x("//span[text()='Выполнено']").as("Пункт меню \"Выполнено\"");
 
-    public JiraTaskPage goToTask() {
-        searchInput.sendKeys("TestSeleniumATHomework");
-        searchInput.pressEnter();
+
+    @Step("Проверка статуса \"{status}\" и версии \"{version}\"")
+    public JiraTaskPage checkDetails(String status, String version) {
+        Assertions.assertEquals(status, this.getStatus());
+        Assertions.assertEquals(version, this.getVersion());
         return this;
     }
 
-    public JiraTaskPage checkDetails() {
-        Assertions.assertEquals("Сделать", this.getStatus());
-        Assertions.assertEquals("Version 2.0", this.getVersion());
-        return this;
-    }
-
-    public JiraTaskPage createBugReport() {
+    @Step("Заведение бага \"{reportName}\"")
+    public JiraTaskPage createBugReport(String reportName) {
         createButton.click();
-        themeInput.shouldBe(Condition.visible).sendKeys("Баг репорт");
+        themeInput.shouldBe(Condition.visible).sendKeys(reportName);
         descriptionArea.sendKeys("Описание\nФактический результат:\nОжидаемый результат:");
         labelsArea.scrollIntoView(false);
         labelsArea.sendKeys("testBugReport");
@@ -55,6 +52,7 @@ public class JiraTaskPage {
         return this;
     }
 
+    @Step("Перевод задачи в статус \"В работе\"")
     public JiraTaskPage setInWorkStatus() {
         businessProcess.shouldBe(Condition.visible).click();
         inProcessButton.shouldBe(Condition.visible).click();
@@ -65,6 +63,7 @@ public class JiraTaskPage {
         return this;
     }
 
+    @Step("Перевод задачи в статус \"Готово\"")
     public JiraTaskPage setCompleteStatus() {
         businessProcess.shouldBe(Condition.visible).click();
         completeStatus.shouldBe(Condition.visible).click();
@@ -73,6 +72,7 @@ public class JiraTaskPage {
         return this;
     }
 
+    @Step("Проверка статуса задачи \"{status}\"")
     public JiraTaskPage checkStatus(String status) {
         Assertions.assertEquals(status, this.getStatus());
         return this;
