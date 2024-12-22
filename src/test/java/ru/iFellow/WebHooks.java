@@ -2,39 +2,28 @@ package ru.iFellow;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.PageLoadStrategy;
 import ru.iFellow.pages.JiraAuthorizationPage;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import ru.iFellow.config.Config;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class WebHooks {
     static final JiraAuthorizationPage authPage = new JiraAuthorizationPage();
-    Properties prop = new Properties();
-    String userName;
-    String password;
-
-    {
-        try (InputStream input = new FileInputStream("src/test/resources/jiraTests.properties")) {
-            prop.load(input);
-            userName = prop.getProperty("login");
-            password = prop.getProperty("password");
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
+    final Config conf = new Config();
 
     @BeforeEach
     public void initBrowser() {
         Configuration.pageLoadStrategy = PageLoadStrategy.EAGER.toString();
-        Selenide.open(prop.getProperty("url"));
+        SelenideLogger.addListener("AllureSelenide",
+                new AllureSelenide()
+                        .screenshots(true)
+                        .savePageSource(true));
+        Selenide.open(conf.getUrl());
         getWebDriver().manage().window().maximize();
     }
 

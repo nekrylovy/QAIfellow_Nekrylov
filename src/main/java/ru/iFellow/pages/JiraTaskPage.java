@@ -29,8 +29,8 @@ public class JiraTaskPage {
 
     @Step("Проверка статуса \"{status}\" и версии \"{version}\"")
     public JiraTaskPage checkDetails(String status, String version) {
-        Assertions.assertEquals(status, this.getStatus());
-        Assertions.assertEquals(version, this.getVersion());
+        Assertions.assertEquals(status, this.status.getOwnText());
+        Assertions.assertEquals(version, this.version.getOwnText());
         return this;
     }
 
@@ -74,16 +74,7 @@ public class JiraTaskPage {
 
     @Step("Проверка статуса задачи \"{status}\"")
     public JiraTaskPage checkStatus(String status) {
-        Assertions.assertEquals(status, this.getStatus());
+        Assertions.assertEquals(status, this.status.getOwnText());
         return this;
     }
-
-    public String getStatus() {
-        return status.getOwnText();
-    }
-
-    public String getVersion() {
-        return version.getOwnText();
-    }
-
 }

@@ -8,8 +8,7 @@ public class JiraAuthorizationTest extends WebHooks {
     @Test
     @DisplayName("Авторизация в \"edujira.ifellow.ru\"")
     public void logInJira() {
-        authPage.authorize(userName, password)
-                .checkAuthorize(userName);
+        authPage.authorize(conf.getUserName(), conf.getPassword())
+                .checkAuthorize(conf.getUserName());
     }
-
 }

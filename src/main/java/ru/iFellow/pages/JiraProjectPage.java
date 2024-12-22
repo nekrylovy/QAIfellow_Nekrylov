@@ -20,7 +20,7 @@ public class JiraProjectPage {
 
     @Step("Проверка имени проекта \"{projectName}\"")
     public JiraProjectPage checkProjectName(String projectName) {
-        Assertions.assertEquals(projectName, this.getProjectTitle());
+        Assertions.assertEquals(projectName, projectTitle.getOwnText());
         return this;
     }
 
@@ -48,10 +48,6 @@ public class JiraProjectPage {
         searchInput.sendKeys(taskName);
         searchInput.pressEnter();
         return Selenide.page(JiraTaskPage.class);
-    }
-
-    public String getProjectTitle() {
-        return projectTitle.getOwnText();
     }
 
     public int getIssueCounter() {

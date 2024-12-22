@@ -8,28 +8,28 @@ public class JiraTaskTest extends WebHooks {
     @Test
     @DisplayName("Проверка деталей задачи \"TestSeleniumATHomework\"")
     public void taskDetailsTest() {
-        authPage.authorize(userName, password)
-                .checkAuthorize(userName)
-                .goToProject(prop.getProperty("testProjectName"))
-                .checkProjectName(prop.getProperty("testProjectName"))
-                .createIssue(prop.getProperty("counterTaskName"))
+        authPage.authorize(conf.getUserName(), conf.getPassword())
+                .checkAuthorize(conf.getUserName())
+                .goToProject(conf.getTestProjectName())
+                .checkProjectName(conf.getTestProjectName())
+                .createIssue(conf.getCounterTaskName())
                 .checkCounter()
-                .goToTask(prop.getProperty("detailsTaskName"))
+                .goToTask(conf.getDetailsTaskName())
                 .checkDetails("Сделать", "Version 2.0");
     }
 
     @Test
     @DisplayName("Заведение бага и перевод задачи по статусам")
     public void bugTest() {
-        authPage.authorize(userName, password)
-                .checkAuthorize(userName)
-                .goToProject(prop.getProperty("testProjectName"))
-                .checkProjectName(prop.getProperty("testProjectName"))
-                .createIssue(prop.getProperty("counterTaskName"))
+        authPage.authorize(conf.getUserName(), conf.getPassword())
+                .checkAuthorize(conf.getUserName())
+                .goToProject(conf.getTestProjectName())
+                .checkProjectName(conf.getTestProjectName())
+                .createIssue(conf.getCounterTaskName())
                 .checkCounter()
-                .goToTask(prop.getProperty("detailsTaskName"))
+                .goToTask(conf.getDetailsTaskName())
                 .checkDetails("Сделать", "Version 2.0")
-                .createBugReport(prop.getProperty("issueReportName"))
+                .createBugReport(conf.getIssueReportName())
                 .checkStatus("Сделать")
                 .setInWorkStatus()
                 .checkStatus("В работе")

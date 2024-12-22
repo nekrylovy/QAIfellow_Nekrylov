@@ -15,7 +15,7 @@ public class JiraDashboardPage {
 
     @Step("Проверка имени пользователя \"{userName}\"")
     public JiraDashboardPage checkAuthorize(String userName) {
-        Assertions.assertEquals(userName, this.getUserName());
+        Assertions.assertEquals(userName, this.userName.getAttribute("data-username"));
         return this;
     }
 
@@ -24,12 +24,8 @@ public class JiraDashboardPage {
         projectsLink.click();
         projectsDropdownMenu.shouldBe(Condition.visible)
                             .$x(".//a[contains(text(), '" + projectName + "')]")
+                            .as("Проект \"" + projectName + "\"")
                             .click();
         return Selenide.page(JiraProjectPage.class);
     }
-
-    public String getUserName() {
-        return userName.getAttribute("data-username");
-    }
-
 }

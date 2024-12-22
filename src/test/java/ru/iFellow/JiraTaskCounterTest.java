@@ -8,21 +8,20 @@ public class JiraTaskCounterTest extends WebHooks {
     @Test
     @DisplayName("Переключение на проект \"Test\"")
     public void goToProjectTest() {
-        authPage.authorize(userName, password)
-                .checkAuthorize(userName)
-                .goToProject(prop.getProperty("testProjectName"))
-                .checkProjectName(prop.getProperty("testProjectName"));
+        authPage.authorize(conf.getUserName(), conf.getPassword())
+                .checkAuthorize(conf.getUserName())
+                .goToProject(conf.getTestProjectName())
+                .checkProjectName(conf.getTestProjectName());
     }
 
     @Test
     @DisplayName("Проверка счетчика задач")
     public void counterTest() {
-        authPage.authorize(userName, password)
-                .checkAuthorize(userName)
-                .goToProject(prop.getProperty("testProjectName"))
-                .checkProjectName(prop.getProperty("testProjectName"))
-                .createIssue("Задача для теста счетчика")
+        authPage.authorize(conf.getUserName(), conf.getPassword())
+                .checkAuthorize(conf.getUserName())
+                .goToProject(conf.getTestProjectName())
+                .checkProjectName(conf.getTestProjectName())
+                .createIssue(conf.getCounterTaskName())
                 .checkCounter();
     }
-
 }
