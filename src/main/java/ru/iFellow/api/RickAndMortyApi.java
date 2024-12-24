@@ -1,36 +1,31 @@
 package ru.iFellow.api;
 
 import io.restassured.response.ValidatableResponse;
+import ru.iFellow.config.RickAndMortyConfig;
 
 import static io.restassured.RestAssured.given;
 
 public class RickAndMortyApi extends BaseApi {
-
-    private static final String CHARACTERS_URN = "/character";
-    private static final String EPISODE_URN = "/episode";
+    private static final RickAndMortyConfig config = new RickAndMortyConfig();
 
     public RickAndMortyApi() {
-        super("https://rickandmortyapi.com/api");
+        super(config.getURL());
     }
 
-    public ValidatableResponse getCharacter() {
+    public ValidatableResponse getCharacters() {
         return given()
                 .when()
-                .get(CHARACTERS_URN)
+                .get(config.getCHARACTERS_URN())
                 .then();
     }
 
-    public ValidatableResponse getCharacter(int id) {
+    public ValidatableResponse get(String url) {
         return given()
                 .when()
-                .get(CHARACTERS_URN + "/" + id)
-                .then();
+                .get(url)
+                .then()
+                .log()
+                .body();
     }
 
-    public ValidatableResponse getEpisode(int id) {
-        return given()
-                .when()
-                .get(EPISODE_URN + "/" + id)
-                .then();
-    }
 }
