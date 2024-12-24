@@ -7,7 +7,7 @@ public class UserConfig extends Config {
     private @Getter String USERS_URN;
 
     public UserConfig() {
-        super("src/test/resources/User.properties");
+        super("src/test/resources/ru/iFellow/properties/User.properties");
         URL = prop.getProperty("URL");
         USERS_URN = prop.getProperty("USERS_URN");
     }

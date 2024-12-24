@@ -27,5 +27,4 @@ public class RickAndMortyApi extends BaseApi {
                 .log()
                 .body();
     }
-
 }
